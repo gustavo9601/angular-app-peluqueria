@@ -1,5 +1,11 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BookingService} from '../../services/booking.service';
+import {Booking} from '../../models/booking';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {IBooking} from '../../interfaces/ibooking';
+
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-add-booking',
@@ -18,13 +24,21 @@ export class AddBookingComponent implements OnInit {
 
   public formBooking: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  public temporalBookingsCreated: IBooking[];
+
+  // @ViewChild('modal_success', {static: false}) modal_sucess;   el static superior a angular 8
+  @ViewChild('modal_success') modal_sucess;
+  @ViewChild('modal_exists') modal_exists;
+
+  constructor(private fb: FormBuilder,
+              private _bookingService: BookingService,
+              private modalService: NgbModal) {
 
     this.initiVariables();
   }
 
   ngOnInit() {
-
+    this.getAllBookings();
   }
 
 
@@ -80,6 +94,48 @@ export class AddBookingComponent implements OnInit {
 
   addBooking() {
     console.log('this.formBooking.value', this.formBooking.value);
+    // Cargando en la variable global los bookings creados
+    this.getAllBookings();
+    const booking = new Booking(this.formBooking.value);
+
+
+    const bookingFound = _.find(this.temporalBookingsCreated, bookingTemporal => {
+      // La verificacion si ya existe un booking en bd es por la fecha y time de creacion
+      // ya que no se puede agendar en el mismo tiempo un booking
+      const date = new Date(bookingTemporal.date);
+      const dateNewBooking = new Date(booking.date);
+      return date.getTime() === dateNewBooking.getTime();  // se compara si el time es igual en la info enviada con la que ya esta almacenada
+    });
+
+
+    console.log('bookingFound', bookingFound);
+    // Si encontro alguna concidencia
+    if (bookingFound) {
+      this.modalService.open(this.modal_exists);
+      return;
+    } else {
+      this._bookingService.addBooking(booking).subscribe(
+        (respuesta) => {
+          // Mostrando el modal seleccionado con el ViewChild
+          this.modalService.open(this.modal_sucess);
+          console.log('respuesta add booking', respuesta);
+          this.formBooking.reset({
+            name: '',
+            date: this.today,
+            service: this.options[0]
+          });
+        }
+      );
+    }
+  }
+
+  async getAllBookings() {
+    return this._bookingService.getBooking().subscribe(
+      (respuesta) => {
+        console.log('respuesta getAllBookings', respuesta);
+        this.temporalBookingsCreated = respuesta;
+      }
+    );
   }
 
 
@@ -87,11 +143,14 @@ export class AddBookingComponent implements OnInit {
   get name() {
     return this.formBooking.get('name');
   }
+
   get date() {
     return this.formBooking.get('date');
   }
+
   get service() {
     return this.formBooking.get('service');
   }
+
 
 }

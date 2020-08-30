@@ -20,5 +20,6 @@
     "label.login.error": "Compruebe el acceso",
     "label.login.success": "Te has logueado correctamente, redirigiendo...",
     "label.list.bookings": "Lista de reservas",
-    "label.no.data": "No hay reservas"
+    "label.no.data": "No hay reservas",
+    "label.show.bookings" : "Ver Reservas"
 }

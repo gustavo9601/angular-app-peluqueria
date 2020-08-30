@@ -1,0 +1,43 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{'label.login' | translate}}</h5>
+  <!--
+  modal.dismiss() Proviene de NgBoostrap
+  -->
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="activeModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-12">
+      <div class="alert alert-primary" *ngIf="showLoginAlertSuccess">
+        <strong>{{'label.login.success' | translate}}</strong>
+      </div>
+      <div class="alert alert-danger" *ngIf="showLoginAlertError">
+        <strong>{{'label.login.error' | translate}}</strong>
+      </div>
+
+      <form [formGroup]="formLogin" (ngSubmit)="autenticateUser()">
+        <div class="row form-group">
+          <div class="col-12">
+            <label for="user">{{'label.user' | translate}}</label>
+            <input type="text" formControlName="user" name="user" class="form-control" id="user">
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-12">
+            <label for="password">{{'label.pass' | translate}}</label>
+            <input type="password" formControlName="password" name="password" class="form-control" id="password">
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-12">
+            <button type="submit" [disabled]="formLogin.invalid" class="btn btn-block btn-dark">{{'label.login' | translate}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+

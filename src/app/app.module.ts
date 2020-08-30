@@ -17,6 +17,8 @@ import {TranslatePipe} from './pipes/translate.pipe';
 import {HeaderComponent} from './components/header/header.component';
 import {AddBookingComponent} from './components/add-booking/add-booking.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { LoginComponent } from './components/login/login.component';
+import { ListBookingsComponent } from './components/list-bookings/list-bookings.component';
 
 // Funcion que inicializara el servicio de translate
 export function translateFactory(provider: TranslateService) {
@@ -29,7 +31,9 @@ export function translateFactory(provider: TranslateService) {
     AppComponent,
     TranslatePipe,
     HeaderComponent,
-    AddBookingComponent
+    AddBookingComponent,
+    LoginComponent,
+    ListBookingsComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +54,10 @@ export function translateFactory(provider: TranslateService) {
       deps: [TranslateService],
       multi: true
     }
+  ],
+  entryComponents: [
+    // Especificamos todos los componentes que se podran cargar dinamicamente
+    LoginComponent
   ],
   bootstrap: [AppComponent]
 })
