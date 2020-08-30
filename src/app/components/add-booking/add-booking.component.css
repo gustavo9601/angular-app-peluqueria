@@ -1,0 +1,11 @@
+#add-booking {
+  background-color: #fff;
+  padding: 10px;
+}
+
+/*Aplicando estilos al input de NgPrime*/
+
+#add-booking p-calendar .form-control:disabled,
+#add-booking p-calendar .form-control[readonly]{
+  background: #FFF;
+}

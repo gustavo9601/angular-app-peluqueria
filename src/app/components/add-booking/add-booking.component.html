@@ -1,0 +1,73 @@
+<div class="row" id="add-booking">
+  <div class="col-12">
+    <form [formGroup]="formBooking" (ngSubmit)="addBooking()">
+      <div class="row from-group">
+        <div class="col-12 mt-2">
+          <label for="name">{{'label.name' | translate}}</label>
+          <input id="name"
+                 formControlName="name"
+                 type="text" class="form-control"
+                 [ngClass]="{'is-valid': formBooking.get('name').dirty && !formBooking.get('name').invalid, 'is-invalid': formBooking.get('name').dirty && formBooking.get('name').invalid}">
+          <!--{{name.errors | json}}-->
+
+          <div class="valid-feedback">
+            <span>{{'label.success' | translate}}</span>
+          </div>
+
+          <div class="invalid-feedback">
+            <span *ngIf="name.errors?.required">{{'label.required' | translate}}</span>
+          </div>
+
+        </div>
+      </div>
+      <div class="row from-group">
+        <div class="col-12 mt-2">
+          <label for="date">{{'label.date' | translate}}</label>
+          <!-- Usando componente de Prime Ng
+          [locale]="locale"    // Especifica el objeto de las respuestas
+          dateFormat="dd/mm/yy"   // formato de fecha
+          showTime="true"   // mostrar o no el time
+          [stepMinute]="30"  // lapso de tiempo (30 en 30 min)
+          [readonlyInput]="true"  // no se podra poner texto o si, solo mediante el elemento seleccionado la fecha
+         inputStyleClass="form-control"   // clase que le aplicara al formato
+         [minDate]="today"   // permite definir una fecha inicio, y no se podra seleccionar anteriores, pasandole una variable :Date()
+          -->
+          <p-calendar id="date"
+                      formControlName="date"
+                      [locale]="locale"
+                      dateFormat="dd/mm/yy"
+                      showTime="true"
+                      [stepMinute]="30"
+                      [readonlyInput]="true"
+                      inputStyleClass="form-control"
+                      [minDate]="today"
+                      [ngClass]="{'is-valid': date.dirty && !date.invalid, 'is-invalid': date.dirty && date.invalid}"
+          ></p-calendar>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-12 mt-2">
+          <label for="services">{{'label.services' | translate}}</label>
+          <select formControlName="service" id="services" class="custom-select"
+                  [ngClass]="{'is-valid': service.dirty && !service.invalid, 'is-invalid': service.dirty && service.invalid}">
+            <!--
+            let first=first  // devuelve el primer elemento del iterable
+            let last=last   // devuelve el ultimo elemento del iterable
+            -->
+            <option [value]="option" [selected]="first"
+                    *ngFor="let option of options;let first=first">{{option | translate}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-12">
+          <button class="btn btn-block btn-outline-dark"
+                  [disabled]="formBooking.invalid"
+          >{{'label.add.booking' | translate}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
